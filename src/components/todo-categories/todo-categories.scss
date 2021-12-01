@@ -1,0 +1,37 @@
+@import "../../styles/variables";
+
+.todo-categories{
+  max-width: 350px;
+  width: 100%;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  position: relative;
+
+  &__item{
+    box-sizing: border-box;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    color: #000;
+    font-family: $mainFont;
+    font-size: 18px;
+    font-weight: 300;
+    text-decoration: none;
+  }
+  
+  &__wrapper{
+    position: sticky;
+    top: 0;
+  }
+
+  &__icon{
+    margin-left: 20px;
+    margin-right: 20px;
+    width: 30px;
+  }
+
+  &__title{
+
+  }
+}

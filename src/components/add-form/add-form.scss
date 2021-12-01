@@ -1,0 +1,61 @@
+@import "../../styles/variables";
+
+.add-form{
+
+  position: sticky;
+  top: 20% ;
+
+  &__wrapper{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    background-color: rgba(0,0,0,.7);
+    z-index: 1000;
+  }
+
+  &__fieldset-wrapper{
+    display: flex;
+    justify-content: center;
+  }
+
+  fieldset{
+    box-sizing: border-box;
+    border: none;
+    max-width: 350px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__textarea{
+    font-family: $mainFont;
+    font-size: 16px;
+    resize: none;
+    border: none;
+    border-radius: 5px;
+    padding-top: 10px;
+    padding-left: 10px;
+
+    &:focus{
+      outline: 1px solid rgb(81, 98, 191);
+    }
+  }
+
+  &__button{
+    font-family: $mainFont;
+    font-weight: 400;
+    text-transform: uppercase;
+    font-size: 16px;
+    margin-top: 10px;
+    box-sizing: border-box;
+    height: 40px;
+    border: none;
+    border-radius: 5px;
+    color: #ffffff;
+    cursor: pointer;
+    background-color: #e33d3d;
+  }
+}
