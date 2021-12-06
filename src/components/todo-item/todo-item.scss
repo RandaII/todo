@@ -5,6 +5,11 @@
   background-color: #ffffff;
   box-sizing: border-box;
   margin-bottom: 10px;
+  position: relative;
+
+  &:hover &__close{
+  opacity: .8;
+}
 
   &:last-child{
     margin-bottom: 0;
@@ -51,6 +56,42 @@
   &__date{
     margin: 0;
     text-align: right;
+  }
+
+  &__close{
+    box-sizing: border-box;
+    height: 25px;
+    width: 25px;
+    border: none;
+    background-color: transparent;
+    position: absolute;
+    top: 0;
+    right: 0;
+    opacity: 0;
+    cursor: pointer;
+
+    &:before{
+      position: absolute;
+      display: block;
+      content: "";
+      width: 2px;
+      height: 15px;
+      background-color: #000000;
+      transform: rotate(45deg);
+      top: 25%;
+      left: 40%;
+    }
+    &:after{
+      position: absolute;
+      display: block;
+      content: "";
+      width: 2px;
+      height: 15px;
+      background-color: #000000;
+      transform: rotate(-45deg);
+      top: 25%;
+      left: 40%;
+    }
   }
 
 }
