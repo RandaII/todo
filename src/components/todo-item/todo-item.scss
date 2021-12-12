@@ -3,13 +3,17 @@
 .todo-item{
   font-family: $mainFont;
   background-color: #ffffff;
+  position: relative;
   box-sizing: border-box;
   margin-bottom: 10px;
-  position: relative;
 
-  &:hover &__close{
-  opacity: .8;
-}
+  &:hover &__close, &:focus &__close{
+    opacity: .8;
+  }
+
+  &:hover, &:focus{
+    outline: 2px solid $mainColor;
+  }
 
   &:last-child{
     margin-bottom: 0;
@@ -26,13 +30,10 @@
   }
 
   label{
-    cursor: pointer;
+    display: block;
     padding: 10px;
     padding-bottom: 5px;
-    display: block;
-  }
-
-  &__wrapper{
+    cursor: pointer;
   }
 
   input{
@@ -40,12 +41,12 @@
   }
 
   &__checkbox{
-    border: 1px solid #000;
     width: 15px;
     height: 15px;
     display: block;
-    margin-right: 10px;
     float: left;
+    margin-right: 10px;
+    border: 1px solid #000;
   }
 
   &__text{
@@ -59,39 +60,44 @@
   }
 
   &__close{
-    box-sizing: border-box;
     height: 25px;
     width: 25px;
-    border: none;
     background-color: transparent;
     position: absolute;
     top: 0;
     right: 0;
+    box-sizing: border-box;
+    border: none;
     opacity: 0;
     cursor: pointer;
 
-    &:before{
-      position: absolute;
-      display: block;
+    &:focus{
+      opacity: .8;
+      outline: 2px solid $mainColor;
+    }
+    &:hover, &:focus{
+      &:before, &:after{
+        background-color: $accentColor;
+      }
+    }
+
+    &:before, &:after{
       content: "";
+      display: block;
+      position: absolute;
       width: 2px;
       height: 15px;
       background-color: #000000;
-      transform: rotate(45deg);
       top: 25%;
       left: 40%;
+      transition: .1s ease-out;
+    }
+
+    &:before{
+      transform: rotate(45deg);
     }
     &:after{
-      position: absolute;
-      display: block;
-      content: "";
-      width: 2px;
-      height: 15px;
-      background-color: #000000;
       transform: rotate(-45deg);
-      top: 25%;
-      left: 40%;
     }
   }
-
 }

@@ -2,47 +2,38 @@
 
 .add-button{
   font-family: $mainFont;
+  font-size: 32px;
+  font-weight: 300;
+  color: #fff;
+  background-color: rgb(81, 98, 191);
   width: 70px;
   height: 70px;
-  font-size: 32px;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-weight: 300;
-  background-color: #e33d3d;
-  color: #fff;
+  border: none;
   border-radius: 50%;
   box-sizing: border-box;
-  border: none;
   cursor: pointer;
   position: sticky;
-  margin-top: 30px;
   margin-left: auto;
-  margin-right: 40px;
+  margin-right: 30px;
   bottom: 25px;
   z-index: 100;
   box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.75);
+  transition: .1s ease-out;
+
+  &.fix-pos{
+    position: absolute;
+    bottom: 25px;
+    right: 10px;
+  }
+
+  &:hover, &:focus{
+    background-color: #e33d3d;
+  }
+
+  &:focus{
+    outline: 1px solid #000000;
+  }
 }
-//.add-button{
-//  font-family: $mainFont;
-//  width: 70px;
-//  height: 70px;
-//  font-size: 32px;
-//  display: flex;
-//  justify-content: center;
-//  align-items: center;
-//  font-weight: 300;
-//  background-color: #e33d3d;
-//  color: #fff;
-//  border-radius: 50%;
-//  box-sizing: border-box;
-//  border: none;
-//  cursor: pointer;
-//  position: sticky;
-//  margin-top: 30px;
-//  margin-left: auto;
-//  margin-right: 40px;
-//  bottom: 25px;
-//  z-index: 100;
-//  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.75);
-//}

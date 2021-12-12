@@ -1,13 +1,9 @@
 .todo-list{
-  background-color: #ebebeb;
   width: 100%;
-  padding: 10px;
-  padding-bottom: 30px;
-  position: relative;
   min-height: 500px;
   height: auto;
-
-  &__wrapper{
-
-  }
+  background-color: #ebebeb;
+  position: relative;
+  padding: 10px;
+  padding-bottom: 30px;
 }

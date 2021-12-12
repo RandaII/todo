@@ -1,4 +1,5 @@
 @import "../../styles/variables";
+@import "../../styles/animations";
 
 .add-form{
 
@@ -6,26 +7,43 @@
   top: 20% ;
 
   &__wrapper{
-    position: absolute;
     width: 100%;
     height: 100%;
-    top: 0;
     background-color: rgba(0,0,0,.7);
+    position: absolute;
+    top: 0;
     z-index: 1000;
+    opacity: 0;
+    animation: .2s ease-out showBlock forwards;
+
+    &.hideBlock-animation{
+      animation: .2s ease-out hideBlock forwards;
+    }
   }
 
   &__fieldset-wrapper{
     display: flex;
     justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  
+  &__title{
+    font-family: $mainFont;
+    font-weight: 300;
+    color: #fff;
+    margin-top: 0;
+    margin-bottom: 10px;
+    text-shadow: 0px 0px 50px #000000;
   }
 
   fieldset{
-    box-sizing: border-box;
-    border: none;
     max-width: 350px;
     width: 100%;
     display: flex;
     flex-direction: column;
+    box-sizing: border-box;
+    border: none;
     margin: 0;
     padding: 0;
   }
@@ -33,29 +51,47 @@
   &__textarea{
     font-family: $mainFont;
     font-size: 16px;
-    resize: none;
     border: none;
     border-radius: 5px;
     padding-top: 10px;
     padding-left: 10px;
+    resize: none;
 
     &:focus{
-      outline: 1px solid rgb(81, 98, 191);
+      outline: 1px solid $mainColor;
     }
+  }
+
+  &__notification{
+    font-family: $mainFont;
+    font-size: 20px;
+    color: $accentColor;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 0;
   }
 
   &__button{
     font-family: $mainFont;
+    font-size: 16px;
     font-weight: 400;
     text-transform: uppercase;
-    font-size: 16px;
-    margin-top: 10px;
-    box-sizing: border-box;
+    color: #ffffff;
+    background-color: $mainColor;
     height: 40px;
+    box-sizing: border-box;
     border: none;
     border-radius: 5px;
-    color: #ffffff;
+    margin-top: 10px;
     cursor: pointer;
-    background-color: #e33d3d;
+    transition: .2s ease-out;
+
+    &:hover, &:focus{
+      background-color: $accentColor;
+    }
+
+    &:focus{
+      outline: 2px solid #000000;
+    }
   }
 }

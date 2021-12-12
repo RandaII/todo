@@ -8,16 +8,22 @@ import AddForm from "../add-form";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import {changeAddFormStatus, fetchRecords} from "../../actions";
-import {useEffect} from "react";
+import {useState, useEffect} from "react";
 import {Route, Routes, useLocation} from "react-router-dom";
 import {returnRecords, filterByDoneStatus, addRecord} from "../../utils";
 
 const App = ({addFormStatus, changeAddFormStatus, records, fetchRecords}) =>{
 
+  const [addFormClasses, setAddFormClasses] = useState(``);
+
   const formSendFunc = async (text) =>{
+    setAddFormClasses(`hideBlock-animation`)
     addRecord(text);
-    await changeAddFormStatus(false);
     fetchRecords(returnRecords());
+    setTimeout(async () =>{
+      setAddFormClasses(``);
+      await changeAddFormStatus(false);
+    }, 200)
   }
 
   const categoriesLinks = [
@@ -37,17 +43,9 @@ const App = ({addFormStatus, changeAddFormStatus, records, fetchRecords}) =>{
       icon: `done`
     }
   ]
-
-  useEffect(() =>{
-    fetchRecords(returnRecords());
-
-    document.addEventListener(`click`, ({target}) =>{
-      if (!target.dataset.addForm){
-        changeAddFormStatus(false)
-      }
-    });
-  },[]);
-
+  
+  useEffect(() => fetchRecords(returnRecords()),[]);
+  
   const routes = (
     <Routes>
 
@@ -71,21 +69,40 @@ const App = ({addFormStatus, changeAddFormStatus, records, fetchRecords}) =>{
 
   const headerTitleId = categoriesLinks.findIndex(({href}) => pathname === href);
 
+  const tabDownHandler = (evt) =>{
+    if (evt.relatedTarget === null){
+      return;
+    }
+    if (addFormStatus){
+      if (!evt.relatedTarget.dataset.addForm){
+        evt.target.focus();
+      }
+    }
+  }
+
+  const appMouseDownHandler = ({target}) =>{
+    if (addFormStatus && !target.dataset.addForm){
+      setAddFormClasses(`hideBlock-animation`);
+      setTimeout(() =>{
+        changeAddFormStatus(false)
+        setAddFormClasses(``);
+      }, 200);
+    }
+  }
+
   return (
-    <div className="app">
+    <div className="app" onBlur={tabDownHandler} onMouseDown={appMouseDownHandler}>
       <Header>{`Todo list - ${categoriesLinks[headerTitleId].title}`}</Header>
       <section className="app__main">
         <TodoCategories>{categoriesLinks}</TodoCategories>
         {routes}
       </section>
-      {addFormStatus && <AddForm sendFunc={formSendFunc}/>}
+      {addFormStatus && <AddForm sendFunc={formSendFunc}>{addFormClasses}</AddForm>}
     </div>
   );
 }
 
-const mapStateToProps = (state) =>{
-  return {...state};
-}
+const mapStateToProps = (state) =>{return {...state};}
 
 const mapDispatchToProps = (dispatch) =>{
   return bindActionCreators({

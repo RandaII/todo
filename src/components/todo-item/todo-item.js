@@ -16,8 +16,14 @@ const TodoItem = ({children:{date, text, done = false}, onInputChange, onCloseCl
     recDate = new Intl.DateTimeFormat(`ru`, {day:`numeric`, month:`long`}).format(new Date(date))
   }
 
+  const onKeyDown = ({target, key}) =>{
+    if (target.dataset.todoItem && key === `Enter`){
+      onInputChange();
+    }
+  }
+
   return (
-    <div className="todo-item">
+    <div className="todo-item" tabIndex="0" onKeyDown={onKeyDown} data-todo-item>
       <input type="checkbox" name={date} id={date} onChange={onInputChange} checked={done}/>
       <label htmlFor={date}>
         <div className="todo-item__wrapper">

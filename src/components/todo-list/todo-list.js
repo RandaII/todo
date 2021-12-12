@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 
 import "./todo-list.scss";
 import TodoItem from "../todo-item";
@@ -9,6 +9,8 @@ import {changeAddFormStatus, fetchRecords} from "../../actions";
 import {changeDoneStatus, deleteRecord, returnRecords} from "../../utils";
 
 const TodoList = ({changeAddFormStatus, fetchRecords, children = []}) =>{
+
+  const [addButtonClass, setAddButtonClass] = useState(``);
 
   const buttonClickFunc = () => changeAddFormStatus(true);
 
@@ -27,11 +29,17 @@ const TodoList = ({changeAddFormStatus, fetchRecords, children = []}) =>{
     return <TodoItem key={value.date} onInputChange={onInputChange} onCloseClick={onCloseClick}>{value}</TodoItem>;
   });
 
+  useEffect(() =>{
+    const classes = (document.querySelector(`.app`).clientHeight <= 604) ? ` fix-pos` : ``;
+    setAddButtonClass(classes);
+  });
+
+
   return (
-    <section className="todo-list">
+    <section className="todo-list" aria-label="Todo Tabs">
       <div className="todo-list__wrapper">
         {todoItems}
-        <AddButton clickFunc={buttonClickFunc}></AddButton>
+        <AddButton clickFunc={buttonClickFunc}>{addButtonClass}</AddButton>
       </div>
     </section>
   );
