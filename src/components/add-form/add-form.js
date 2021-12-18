@@ -12,10 +12,12 @@ const AddForm = ({sendFunc, children = ``}) =>{
 
   const notificationText = `Текст заметки пуст`;
 
+  // при фокусе убираем уведомление
   const onFocus = () => setAreaValueIsEmpty(false);
 
   const onSend = async (evt) =>{
     evt.preventDefault();
+    // если пустая строка, выводим уведомление
     if (areaValue.trim() === ``){
       setAreaValueIsEmpty(true);
       setAreaValue(``);

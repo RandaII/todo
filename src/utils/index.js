@@ -9,10 +9,13 @@ const sortByDate = (a, b) => {
   return 0;
 };
 
+// фильтр по done статусу
 const filterByDoneStatus = (arr, doneStatus) => arr.filter((value) => value.done === doneStatus);
 
+// вернуть массив заметок из localstorage
 const returnRecords = () => JSON.parse(localStorage.records).sort(sortByDate);
 
+// изменить done статус, в качестве id используется date
 const changeDoneStatus = (dateId) =>{
   let recordsArray = returnRecords();
   const recordId = recordsArray.findIndex(({date})=> date === dateId);
@@ -20,12 +23,14 @@ const changeDoneStatus = (dateId) =>{
   localStorage.records = JSON.stringify(recordsArray);
 }
 
+// удалить запись, в качестве id используется date
 const deleteRecord = (dateId) =>{
   const recordsArray = returnRecords();
   const recordId = recordsArray.findIndex(({date})=> date === dateId);
   localStorage.records = JSON.stringify([...recordsArray.slice(0, recordId), ...recordsArray.slice(recordId + 1)]) ;
 }
 
+// добавить запись
 const addRecord = (text) =>{
 
   const recordObject = {

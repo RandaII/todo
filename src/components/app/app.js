@@ -15,12 +15,18 @@ import PropTypes from "prop-types";
 
 const App = ({addFormStatus, changeAddFormStatus, records, fetchRecords}) =>{
 
+  // константа для анимации addForm, при удалении
   const [addFormClasses, setAddFormClasses] = useState(``);
 
+  // функция для добавления записи
   const formSendFunc = async (text) =>{
+    // скрываем модальное окно
     setAddFormClasses(`hideBlock-animation`)
+    //добавляем запись в localstorage
     addRecord(text);
+    // добавляем в store обновленный массив из localstorage
     fetchRecords(returnRecords());
+    // убираем класс анимации, меняем AddFormStatus на false и скроллим страницу на начало документа
     setTimeout(async () =>{
       setAddFormClasses(``);
       await changeAddFormStatus(false);
@@ -31,6 +37,7 @@ const App = ({addFormStatus, changeAddFormStatus, records, fetchRecords}) =>{
     }, 200)
   }
 
+  // массив для todo-categories
   const categoriesLinks = [
     {
       href: `/`,
@@ -48,9 +55,11 @@ const App = ({addFormStatus, changeAddFormStatus, records, fetchRecords}) =>{
       icon: `done`
     }
   ]
-  
+
+  // после первого монтирования, получаем в store массив записей из localstorage
   useEffect(() => fetchRecords(returnRecords()),[]);
-  
+
+  // в зависимости от категории сортируем массив записей в роутах
   const routes = (
     <Routes>
 
@@ -72,8 +81,10 @@ const App = ({addFormStatus, changeAddFormStatus, records, fetchRecords}) =>{
 
   const {pathname} = useLocation();
 
+  // получаем id для header
   const headerTitleId = categoriesLinks.findIndex(({href}) => pathname === href);
 
+  // при активном модальном окне, при смене фокуса, если у элемента нет атрибута data-add-form, возвращаем фокус на предыдущий элемент
   const tabDownHandler = (evt) =>{
     if (evt.relatedTarget === null){
       return;
@@ -85,6 +96,7 @@ const App = ({addFormStatus, changeAddFormStatus, records, fetchRecords}) =>{
     }
   }
 
+  // при активном модальном окне, при клике по элементу без атрибута data-add-form, добавляем hideBlock-animation и меняем AddFormStatus на false, после чего убираем ранее добавленный класс
   const appMouseDownHandler = ({target}) =>{
     if (addFormStatus && !target.dataset.addForm){
       setAddFormClasses(`hideBlock-animation`);

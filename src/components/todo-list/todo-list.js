@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 
-import "./todo-list.scss";
 import TodoItem from "../todo-item";
+import "./todo-list.scss";
 import AddButton from "../add-button";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
@@ -13,15 +13,18 @@ const TodoList = ({changeAddFormStatus, fetchRecords, children = []}) =>{
 
   const [addButtonClass, setAddButtonClass] = useState(``);
 
+  // по клику по AddButton отображается addForm
   const buttonClickFunc = () => changeAddFormStatus(true);
 
   const todoItems = children.map((value) =>{
 
+    // при изменении input меняем done статус у данной заметки, и обновляем store
     const onInputChange = async () =>{
       changeDoneStatus(value.date)
       await fetchRecords(returnRecords());
     }
 
+    // удаляем данную заметку, и обновляем store
     const onCloseClick = async () =>{
       deleteRecord(value.date);
       await fetchRecords(returnRecords());
@@ -30,6 +33,7 @@ const TodoList = ({changeAddFormStatus, fetchRecords, children = []}) =>{
     return <TodoItem key={value.date} onInputChange={onInputChange} onCloseClick={onCloseClick}>{value}</TodoItem>;
   });
 
+  // при обновлении, проверяем высоту документа и при необходимости меняем класс у addButton, для корректного отображения компонента
   useEffect(() =>{
     const classes = (document.querySelector(`.app`).clientHeight <= 604) ? ` fix-pos` : ``;
     setAddButtonClass(classes);

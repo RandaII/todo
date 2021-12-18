@@ -8,6 +8,7 @@ const TodoItem = ({children:{date, text, done}, onInputChange, onCloseClick}) =>
   let recDate = new Date(date);
   const nowDate = new Date();
 
+  // форматируем дату заметки, в зависимости от дня добавления
   if (recDate.getDay() === nowDate.getDay()
     && recDate.getMonth() === nowDate.getMonth()
     && recDate.getFullYear() === nowDate.getFullYear()){
@@ -17,6 +18,7 @@ const TodoItem = ({children:{date, text, done}, onInputChange, onCloseClick}) =>
     recDate = new Intl.DateTimeFormat(`ru`, {day:`numeric`, month:`long`}).format(new Date(date))
   }
 
+  // функция меняет статус done у заметки при нажатии enter
   const onKeyDown = ({target, key}) =>{
     if (target.dataset.todoItem && key === `Enter`){
       onInputChange();
