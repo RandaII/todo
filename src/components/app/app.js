@@ -12,6 +12,7 @@ import {useState, useEffect} from "react";
 import {Route, Routes, useLocation} from "react-router-dom";
 import {returnRecords, filterByDoneStatus, addRecord} from "../../utils";
 import PropTypes from "prop-types";
+import ErrorBoundary from "../error-boundary";
 
 const App = ({addFormStatus, changeAddFormStatus, records, fetchRecords}) =>{
 
@@ -61,22 +62,25 @@ const App = ({addFormStatus, changeAddFormStatus, records, fetchRecords}) =>{
 
   // в зависимости от категории сортируем массив записей в роутах
   const routes = (
-    <Routes>
+    <ErrorBoundary>
+      <Routes>
 
-      <Route path="/" element={<TodoList>{records}</TodoList>
-      } exact/>
+        <Route path="/" element={<TodoList>{records}</TodoList>
+        } exact/>
 
-      <Route path="/todo" element={
-        <TodoList>{filterByDoneStatus(records, false)
-        }</TodoList>
-      } exact/>
+        <Route path="/todo" element={
+          <TodoList>{filterByDoneStatus(records, false)
+          }</TodoList>
+        } exact/>
 
-      <Route path="/done" element={
-        <TodoList>{filterByDoneStatus(records, true)
-        }</TodoList>
-      } exact/>
+        <Route path="/done" element={
+          <TodoList>{filterByDoneStatus(records, true)
+          }</TodoList>
+        } exact/>
 
-    </Routes>
+      </Routes>
+     </ErrorBoundary>
+
   );
 
   const {pathname} = useLocation();
@@ -111,10 +115,14 @@ const App = ({addFormStatus, changeAddFormStatus, records, fetchRecords}) =>{
     <div className="app" onBlur={tabDownHandler} onMouseDown={appMouseDownHandler}>
       <Header>{`Todo list - ${categoriesLinks[headerTitleId].title}`}</Header>
       <section className="app__main">
-        <TodoCategories>{categoriesLinks}</TodoCategories>
+        <ErrorBoundary>
+          <TodoCategories>{categoriesLinks}</TodoCategories>
+        </ErrorBoundary>
         {routes}
       </section>
-      {addFormStatus && <AddForm sendFunc={formSendFunc}>{addFormClasses}</AddForm>}
+      <ErrorBoundary>
+        {addFormStatus && <AddForm sendFunc={formSendFunc}>{addFormClasses}</AddForm>}
+      </ErrorBoundary>
     </div>
   );
 }
