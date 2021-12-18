@@ -7,6 +7,7 @@ import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import {changeAddFormStatus, fetchRecords} from "../../actions";
 import {changeDoneStatus, deleteRecord, returnRecords} from "../../utils";
+import PropTypes from "prop-types";
 
 const TodoList = ({changeAddFormStatus, fetchRecords, children = []}) =>{
 
@@ -52,6 +53,16 @@ const  mapDispatchToProps = (dispatch) =>{
     changeAddFormStatus,
     fetchRecords
   }, dispatch);
+}
+
+TodoList.propTypes = {
+  changeAddFormStatus: PropTypes.func.isRequired,
+  fetchRecords: PropTypes.func.isRequired,
+  children: PropTypes.arrayOf(PropTypes.shape({
+    date: PropTypes.number.isRequired,
+    done: PropTypes.bool.isRequired,
+    text: PropTypes.string.isRequired
+  }))
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TodoList);

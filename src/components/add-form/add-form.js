@@ -1,8 +1,9 @@
 import React, {useState} from "react";
+import PropTypes from "prop-types";
 
 import "./add-form.scss";
 
-const AddForm = ({sendFunc, children}) =>{
+const AddForm = ({sendFunc, children = ``}) =>{
 
   const [areaValue, setAreaValue] = useState(``);
   const [areaValueIsEmpty, setAreaValueIsEmpty] = useState(false);
@@ -11,9 +12,7 @@ const AddForm = ({sendFunc, children}) =>{
 
   const notificationText = `Текст заметки пуст`;
 
-  const onFocus = () =>{
-    setAreaValueIsEmpty(false);
-  }
+  const onFocus = () => setAreaValueIsEmpty(false);
 
   const onSend = async (evt) =>{
     evt.preventDefault();
@@ -41,6 +40,11 @@ const AddForm = ({sendFunc, children}) =>{
     </form>
   </div>
   );
+}
+
+AddForm.propTypes = {
+  sendFunc: PropTypes.func.isRequired,
+  children: PropTypes.string
 }
 
 export default AddForm;

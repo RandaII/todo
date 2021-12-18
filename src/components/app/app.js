@@ -11,6 +11,7 @@ import {changeAddFormStatus, fetchRecords} from "../../actions";
 import {useState, useEffect} from "react";
 import {Route, Routes, useLocation} from "react-router-dom";
 import {returnRecords, filterByDoneStatus, addRecord} from "../../utils";
+import PropTypes from "prop-types";
 
 const App = ({addFormStatus, changeAddFormStatus, records, fetchRecords}) =>{
 
@@ -23,6 +24,10 @@ const App = ({addFormStatus, changeAddFormStatus, records, fetchRecords}) =>{
     setTimeout(async () =>{
       setAddFormClasses(``);
       await changeAddFormStatus(false);
+      window.scrollBy({
+        top: -document.body.offsetHeight,
+        behavior: 'smooth'
+      });
     }, 200)
   }
 
@@ -100,6 +105,17 @@ const App = ({addFormStatus, changeAddFormStatus, records, fetchRecords}) =>{
       {addFormStatus && <AddForm sendFunc={formSendFunc}>{addFormClasses}</AddForm>}
     </div>
   );
+}
+
+App.propTypes = {
+  addFormStatus: PropTypes.bool.isRequired,
+  changeAddFormStatus: PropTypes.func.isRequired,
+  fetchRecords: PropTypes.func.isRequired,
+  records: PropTypes.arrayOf(PropTypes.shape({
+    date: PropTypes.number.isRequired,
+    done: PropTypes.bool.isRequired,
+    text: PropTypes.string.isRequired
+  }))
 }
 
 const mapStateToProps = (state) =>{return {...state};}

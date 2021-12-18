@@ -1,8 +1,9 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 import "./todo-item.scss";
 
-const TodoItem = ({children:{date, text, done = false}, onInputChange, onCloseClick}) =>{
+const TodoItem = ({children:{date, text, done}, onInputChange, onCloseClick}) =>{
 
   let recDate = new Date(date);
   const nowDate = new Date();
@@ -35,6 +36,16 @@ const TodoItem = ({children:{date, text, done = false}, onInputChange, onCloseCl
       <button type="button" className="todo-item__close" onClick={onCloseClick}></button>
     </div>
   );
+}
+
+TodoItem.propTypes = {
+  onInputChange: PropTypes.func.isRequired,
+  onCloseClick: PropTypes.func.isRequired,
+  children: PropTypes.shape({
+    date: PropTypes.number.isRequired,
+    text: PropTypes.string.isRequired,
+    done: PropTypes.bool.isRequired,
+  }).isRequired
 }
 
 export default TodoItem;

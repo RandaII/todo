@@ -1,6 +1,7 @@
 import React from "react";
-import icons from "./img";
 import {NavLink} from "react-router-dom";
+import PropTypes from "prop-types";
+import icons from "./img";
 
 import "./todo-categories.scss";
 
@@ -15,5 +16,13 @@ const TodoCategories = ({children}) =>
       )}
     </div>
   </aside>);
+
+TodoCategories.propTypes = {
+  children: PropTypes.arrayOf(PropTypes.shape({
+    href: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    icon: PropTypes.string.isRequired
+  }))
+}
 
 export default TodoCategories;
