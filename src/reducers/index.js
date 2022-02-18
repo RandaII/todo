@@ -5,7 +5,6 @@ const initialState = {
 
 const reducer = (state = initialState, action) =>{
   switch (action.type) {
-
     case `CHANGE_ADD_FORM_STATUS`:
       return {
         ...state,
@@ -16,7 +15,6 @@ const reducer = (state = initialState, action) =>{
         ...state,
         records: action.payload
       }
-
     default:
       return state;
   }

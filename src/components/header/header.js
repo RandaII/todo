@@ -1,6 +1,6 @@
 import React from "react";
-import "./header.scss";
 import PropTypes from "prop-types";
+import "./header.scss";
 
 const Header = ({children = ``}) => <div className="header">{children}</div>;
 

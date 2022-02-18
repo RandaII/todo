@@ -6,6 +6,7 @@ import "./add-form.scss";
 const AddForm = ({sendFunc, children = ``}) =>{
 
   const [areaValue, setAreaValue] = useState(``);
+  // для вывода уведомления, при попытке отправить пустое value
   const [areaValueIsEmpty, setAreaValueIsEmpty] = useState(false);
 
   const onChange = ({target:{value}}) => setAreaValue(value);
@@ -15,7 +16,7 @@ const AddForm = ({sendFunc, children = ``}) =>{
   // при фокусе убираем уведомление
   const onFocus = () => setAreaValueIsEmpty(false);
 
-  const onSend = async (evt) =>{
+  const onSend = (evt) =>{
     evt.preventDefault();
     // если пустая строка, выводим уведомление
     if (areaValue.trim() === ``){
@@ -23,7 +24,6 @@ const AddForm = ({sendFunc, children = ``}) =>{
       setAreaValue(``);
       return
     }
-
     sendFunc(areaValue);
   }
 

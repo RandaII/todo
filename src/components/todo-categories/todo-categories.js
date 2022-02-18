@@ -8,8 +8,8 @@ import "./todo-categories.scss";
 const TodoCategories = ({children}) =>
   (<aside className="todo-categories">
     <div className="todo-categories__wrapper">
-      {children.map(({href, title, icon}, key) =>
-        (<NavLink to={href} className="todo-categories__item" key={key}>
+      {children.map(({id, href, title, icon}) =>
+        (<NavLink to={href} className="todo-categories__item" key={id}>
           {icons[icon]}
           < span className="todo-categories__title">{title}</span>
         </NavLink>)
@@ -22,7 +22,7 @@ TodoCategories.propTypes = {
     href: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     icon: PropTypes.string.isRequired
-  }))
+  })).isRequired
 }
 
 export default TodoCategories;

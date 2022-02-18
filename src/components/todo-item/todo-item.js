@@ -1,22 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
+import {formatDate} from "../../utils";
 
 import "./todo-item.scss";
 
 const TodoItem = ({children:{date, text, done}, onInputChange, onCloseClick}) =>{
 
-  let recDate = new Date(date);
-  const nowDate = new Date();
-
   // форматируем дату заметки, в зависимости от дня добавления
-  if (recDate.getDay() === nowDate.getDay()
-    && recDate.getMonth() === nowDate.getMonth()
-    && recDate.getFullYear() === nowDate.getFullYear()){
-    recDate = new Intl.DateTimeFormat(`ru`, {hour:`2-digit`, minute:`2-digit`}).format(new Date(date))
-  }
-  else {
-    recDate = new Intl.DateTimeFormat(`ru`, {day:`numeric`, month:`long`}).format(new Date(date))
-  }
+  let recDate = formatDate(date);
 
   // функция меняет статус done у заметки при нажатии enter
   const onKeyDown = ({target, key}) =>{
@@ -27,7 +18,11 @@ const TodoItem = ({children:{date, text, done}, onInputChange, onCloseClick}) =>
 
   return (
     <div className="todo-item" tabIndex="0" onKeyDown={onKeyDown} data-todo-item>
-      <input type="checkbox" name={date} id={date} onChange={onInputChange} checked={done}/>
+      <input type="checkbox"
+             name={date}
+             id={date}
+             onChange={onInputChange}
+             checked={done}/>
       <label htmlFor={date}>
         <div className="todo-item__wrapper">
           <span className="todo-item__checkbox"></span>

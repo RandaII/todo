@@ -14,9 +14,12 @@
     top: 0;
     z-index: 1000;
     opacity: 0;
-    animation: .2s ease-out showBlock forwards;
 
-    &.hideBlock-animation{
+    &.entering, &.entered{
+      animation: .2s ease-out showBlock forwards;
+    }
+
+    &.exiting, &.exited{
       animation: .2s ease-out hideBlock forwards;
     }
   }

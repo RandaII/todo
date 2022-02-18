@@ -1,13 +1,12 @@
 import React, {useState, useEffect} from "react";
+import {connect} from "react-redux";
+import PropTypes from "prop-types";
+import {changeAddFormStatus, fetchRecordsWithCallback} from "../../actions";
 
 import TodoItem from "../todo-item";
-import "./todo-list.scss";
 import AddButton from "../add-button";
-import {connect} from "react-redux";
-import {bindActionCreators} from "redux";
-import {changeAddFormStatus, fetchRecords} from "../../actions";
-import {changeDoneStatus, deleteRecord, returnRecords} from "../../utils";
-import PropTypes from "prop-types";
+import "./todo-list.scss";
+
 
 const TodoList = ({changeAddFormStatus, fetchRecords, children = []}) =>{
 
@@ -19,26 +18,20 @@ const TodoList = ({changeAddFormStatus, fetchRecords, children = []}) =>{
   const todoItems = children.map((value) =>{
 
     // при изменении input меняем done статус у данной заметки, и обновляем store
-    const onInputChange = async () =>{
-      changeDoneStatus(value.date)
-      await fetchRecords(returnRecords());
-    }
+    const onInputChange = () => fetchRecords(`changeDoneStatus`,value.date);
 
     // удаляем данную заметку, и обновляем store
-    const onCloseClick = async () =>{
-      deleteRecord(value.date);
-      await fetchRecords(returnRecords());
-    }
+    const onCloseClick = () => fetchRecords(`deleteRecord`, value.date);
 
     return <TodoItem key={value.date} onInputChange={onInputChange} onCloseClick={onCloseClick}>{value}</TodoItem>;
   });
 
   // при обновлении, проверяем высоту документа и при необходимости меняем класс у addButton, для корректного отображения компонента
-  useEffect(() =>{
-    const classes = (document.querySelector(`.app`).clientHeight <= 604) ? ` fix-pos` : ``;
-    setAddButtonClass(classes);
-  });
 
+  useEffect(() =>{
+    const classes = (document.getElementById(`app`).clientHeight <= 604) ? ` fix-pos` : ``;
+    (addButtonClass !== classes) && setAddButtonClass(classes);
+  });
 
   return (
     <section className="todo-list" aria-label="Todo Tabs">
@@ -50,13 +43,11 @@ const TodoList = ({changeAddFormStatus, fetchRecords, children = []}) =>{
   );
 }
 
-const mapStateToProps = () =>{return {};}
+const mapStateToProps = () =>({});
 
-const  mapDispatchToProps = (dispatch) =>{
-  return bindActionCreators({
-    changeAddFormStatus,
-    fetchRecords
-  }, dispatch);
+const  mapDispatchToProps ={
+  changeAddFormStatus,
+  fetchRecords: fetchRecordsWithCallback
 }
 
 TodoList.propTypes = {

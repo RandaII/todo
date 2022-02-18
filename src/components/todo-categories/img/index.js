@@ -48,7 +48,6 @@ const icons = {
       </switch>
     </svg>
   )
-
 }
 
 export default icons

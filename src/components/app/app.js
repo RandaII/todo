@@ -1,56 +1,53 @@
-import React from "react";
+import React, {useEffect} from "react";
+import {Transition} from "react-transition-group";
+import {connect} from "react-redux";
+import {changeAddFormStatus, fetchRecordsWithCallback} from "../../actions";
+import {Navigate, Route, Routes, useLocation,} from "react-router-dom";
+import {filterByDoneStatus} from "../../utils";
+import PropTypes from "prop-types";
 
 import "./app.scss";
 import Header from "../header";
 import TodoCategories from "../todo-categories";
 import TodoList from "../todo-list";
 import AddForm from "../add-form";
-import {connect} from "react-redux";
-import {bindActionCreators} from "redux";
-import {changeAddFormStatus, fetchRecords} from "../../actions";
-import {useState, useEffect} from "react";
-import {Route, Routes, useLocation} from "react-router-dom";
-import {returnRecords, filterByDoneStatus, addRecord} from "../../utils";
-import PropTypes from "prop-types";
 import ErrorBoundary from "../error-boundary";
 
 const App = ({addFormStatus, changeAddFormStatus, records, fetchRecords}) =>{
 
-  // константа для анимации addForm, при удалении
-  const [addFormClasses, setAddFormClasses] = useState(``);
-
   // функция для добавления записи
   const formSendFunc = async (text) =>{
-    // скрываем модальное окно
-    setAddFormClasses(`hideBlock-animation`)
-    //добавляем запись в localstorage
-    addRecord(text);
-    // добавляем в store обновленный массив из localstorage
-    fetchRecords(returnRecords());
-    // убираем класс анимации, меняем AddFormStatus на false и скроллим страницу на начало документа
-    setTimeout(async () =>{
-      setAddFormClasses(``);
-      await changeAddFormStatus(false);
+
+    //добавляем запись в localstorage, а следом в store обновленный массив из localstorage
+    fetchRecords(`addRecord`, text);
+
+    // меняем AddFormStatus на false
+    await changeAddFormStatus(false);
+
+    // скроллим страницу на начало документа
+    setTimeout(async () =>
       window.scrollBy({
         top: -document.body.offsetHeight,
         behavior: 'smooth'
-      });
-    }, 200)
+      }), 200);
   }
 
   // массив для todo-categories
   const categoriesLinks = [
     {
+      id: 0,
       href: `/`,
       title: `All tasks`,
       icon: `menu`
     },
     {
+      id: 1,
       href: `/todo`,
       title: `Todo`,
       icon: `list`
     },
     {
+      id: 2,
       href: `/done`,
       title: `Done`,
       icon: `done`
@@ -58,7 +55,7 @@ const App = ({addFormStatus, changeAddFormStatus, records, fetchRecords}) =>{
   ]
 
   // после первого монтирования, получаем в store массив записей из localstorage
-  useEffect(() => fetchRecords(returnRecords()),[]);
+  useEffect(() => fetchRecords(),[]);
 
   // в зависимости от категории сортируем массив записей в роутах
   const routes = (
@@ -78,9 +75,10 @@ const App = ({addFormStatus, changeAddFormStatus, records, fetchRecords}) =>{
           }</TodoList>
         } exact/>
 
+        <Route path="*" element={<Navigate to="/"/>} />
+
       </Routes>
      </ErrorBoundary>
-
   );
 
   const {pathname} = useLocation();
@@ -100,29 +98,33 @@ const App = ({addFormStatus, changeAddFormStatus, records, fetchRecords}) =>{
     }
   }
 
-  // при активном модальном окне, при клике по элементу без атрибута data-add-form, добавляем hideBlock-animation и меняем AddFormStatus на false, после чего убираем ранее добавленный класс
+  // при активном модальном окне, при клике по элементу без атрибута data-add-form, меняем AddFormStatus на false
   const appMouseDownHandler = ({target}) =>{
     if (addFormStatus && !target.dataset.addForm){
-      setAddFormClasses(`hideBlock-animation`);
-      setTimeout(() =>{
         changeAddFormStatus(false)
-        setAddFormClasses(``);
-      }, 200);
     }
   }
 
   return (
-    <div className="app" onBlur={tabDownHandler} onMouseDown={appMouseDownHandler}>
-      <Header>{`Todo list - ${categoriesLinks[headerTitleId].title}`}</Header>
+    <div id="app" className="app" onBlur={tabDownHandler} onMouseDown={appMouseDownHandler}>
+      <Header>{`Todo list - ${categoriesLinks[headerTitleId]?.title}`}</Header>
       <section className="app__main">
         <ErrorBoundary>
           <TodoCategories>{categoriesLinks}</TodoCategories>
         </ErrorBoundary>
         {routes}
       </section>
-      <ErrorBoundary>
-        {addFormStatus && <AddForm sendFunc={formSendFunc}>{addFormClasses}</AddForm>}
-      </ErrorBoundary>
+
+      <Transition
+        in={addFormStatus}
+        timeout={200}
+        mountOnEnter
+        unmountOnExit>
+          {(state) =>
+            <ErrorBoundary><AddForm sendFunc={formSendFunc}>{`${state}`}</AddForm></ErrorBoundary>
+          }
+      </Transition>
+
     </div>
   );
 }
@@ -135,16 +137,14 @@ App.propTypes = {
     date: PropTypes.number.isRequired,
     done: PropTypes.bool.isRequired,
     text: PropTypes.string.isRequired
-  }))
+  })).isRequired
 }
 
-const mapStateToProps = (state) =>{return {...state};}
+const mapStateToProps = (state) =>({...state});
 
-const mapDispatchToProps = (dispatch) =>{
-  return bindActionCreators({
-    changeAddFormStatus,
-    fetchRecords
-  }, dispatch)
-}
+const mapDispatchToProps = {
+  changeAddFormStatus,
+  fetchRecords: fetchRecordsWithCallback
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
