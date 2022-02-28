@@ -6,6 +6,7 @@
   width: 100%;
   background-color: #ffffff;
   border: 1px solid #ccc;
+  flex: 2 2;
 
   &__item{
     font-family: $mainFont;
@@ -62,5 +63,19 @@
     height: auto;
     margin-left: 20px;
     margin-right: 20px;
+  }
+}
+
+
+@media screen and (max-width: 500px) {
+  .todo-categories{
+    &__item{
+      font-size: 16px;
+    }
+    &__icon{
+      width: 25px;
+      margin-left: 15px;
+      margin-right: 15px;
+    }
   }
 }
