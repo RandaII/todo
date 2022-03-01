@@ -16,7 +16,7 @@ const AddForm = ({sendFunc, children = ``}) =>{
   // при фокусе убираем уведомление
   const onFocus = () => setAreaValueIsEmpty(false);
 
-  const onSend = (evt) =>{
+  const onSubmit = (evt) =>{
     evt.preventDefault();
     // если пустая строка, выводим уведомление
     if (areaValue.trim() === ``){
@@ -29,14 +29,14 @@ const AddForm = ({sendFunc, children = ``}) =>{
 
   return (
     <div className={`add-form__wrapper ${children}`}>
-      <form className="add-form" onSubmit={onSend}>
+      <form className="add-form" onSubmit={onSubmit}>
         <div className="add-form__fieldset-wrapper">
         <h1 className="add-form__title" data-add-form>Добавить заметку</h1>
         <fieldset data-add-form>
           <textarea name="add-form__textarea" id="add-form__textarea" className="add-form__textarea" cols="30" rows="10" data-add-form value={areaValue} onChange={onChange} onFocus={onFocus} autoFocus={true}></textarea>
           {areaValueIsEmpty &&
           <p className="add-form__notification" data-add-form>{notificationText}</p>}
-          <button type="button" className="add-form__button" data-add-form onClick={onSend}>Добавить</button>
+          <button type="button" className="add-form__button" data-add-form onClick={onSubmit}>Добавить</button>
         </fieldset>
       </div>
     </form>

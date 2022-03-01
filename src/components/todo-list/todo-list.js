@@ -1,19 +1,19 @@
 import React, {useState, useEffect} from "react";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {changeAddFormStatus, fetchRecordsWithCallback} from "../../actions";
+import {setAddFormStatus, fetchRecordsWithCallback} from "../../actions";
 
 import TodoItem from "../todo-item";
 import AddButton from "../add-button";
 import "./todo-list.scss";
 
 
-const TodoList = ({changeAddFormStatus, fetchRecords, children = []}) =>{
+const TodoList = ({setAddFormStatus, fetchRecords, children = []}) =>{
 
   const [addButtonClass, setAddButtonClass] = useState(``);
 
   // по клику по AddButton отображается addForm
-  const buttonClickFunc = () => changeAddFormStatus(true);
+  const buttonClickFunc = () => setAddFormStatus(true);
 
   const todoItems = children.map((value) =>{
 
@@ -46,12 +46,12 @@ const TodoList = ({changeAddFormStatus, fetchRecords, children = []}) =>{
 const mapStateToProps = () =>({});
 
 const  mapDispatchToProps ={
-  changeAddFormStatus,
+  setAddFormStatus,
   fetchRecords: fetchRecordsWithCallback
 }
 
 TodoList.propTypes = {
-  changeAddFormStatus: PropTypes.func.isRequired,
+  setAddFormStatus: PropTypes.func.isRequired,
   fetchRecords: PropTypes.func.isRequired,
   children: PropTypes.arrayOf(PropTypes.shape({
     date: PropTypes.number.isRequired,

@@ -1,8 +1,8 @@
 import {StorageChanger} from "../utils";
 
 // изменить AddFormStatus, payload - bool
-const changeAddFormStatus = (payload) =>({
-  type: `CHANGE_ADD_FORM_STATUS`,
+const setAddFormStatus = (payload) =>({
+  type: `SET_ADD_FORM_STATUS`,
   payload
 });
 
@@ -19,7 +19,7 @@ const fetchRecordsWithCallback = (actionName, argument) =>{
 };
 
 export {
-  changeAddFormStatus,
+  setAddFormStatus,
   fetchRecords,
   fetchRecordsWithCallback
 }

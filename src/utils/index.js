@@ -26,7 +26,7 @@ class StorageChanger {
       date: new Date().getTime(),
       text,
       done: false
-    }
+    };
 
     // в случае пустого records, создает первоначальную структуру
     if (!localStorage.records){
@@ -41,7 +41,7 @@ class StorageChanger {
 
   // изменить done статус, в качестве id используется date
   static changeDoneStatus = (dateId) =>{
-    let recordsArray = this.returnRecords()
+    let recordsArray = this.returnRecords();
     const recordId = recordsArray.findIndex(({date})=> date === dateId);
     recordsArray[recordId].done = !recordsArray[recordId].done;
     localStorage.records = JSON.stringify(recordsArray);
@@ -51,9 +51,8 @@ class StorageChanger {
   static deleteRecord = (dateId) =>{
     const recordsArray = this.returnRecords();
     const recordId = recordsArray.findIndex(({date})=> date === dateId);
-    localStorage.records = JSON.stringify([...recordsArray.slice(0, recordId), ...recordsArray.slice(recordId + 1)]) ;
+    localStorage.records = JSON.stringify([...recordsArray.slice(0, recordId), ...recordsArray.slice(recordId + 1)]);
   }
-
 }
 
 // фильтр по done статусу
@@ -70,10 +69,10 @@ const formatDate = (date) =>{
     && recDate.getMonth() === nowDate.getMonth()
     && recDate.getFullYear() === nowDate.getFullYear()){
 
-    return new Intl.DateTimeFormat(`ru`, {hour:`2-digit`, minute:`2-digit`}).format(new Date(date))
+    return new Intl.DateTimeFormat(`ru`, {hour:`2-digit`, minute:`2-digit`}).format(new Date(date));
   }
 
-  return new Intl.DateTimeFormat(`ru`, {day:`numeric`, month:`long`}).format(new Date(date))
+  return new Intl.DateTimeFormat(`ru`, {day:`numeric`, month:`long`}).format(new Date(date));
 }
 
 export {

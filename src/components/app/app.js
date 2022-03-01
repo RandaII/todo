@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import {Transition} from "react-transition-group";
 import {connect} from "react-redux";
-import {changeAddFormStatus, fetchRecordsWithCallback} from "../../actions";
+import {setAddFormStatus, fetchRecordsWithCallback} from "../../actions";
 import {Navigate, Route, Routes, useLocation,} from "react-router-dom";
 import {filterByDoneStatus} from "../../utils";
 import PropTypes from "prop-types";
@@ -13,7 +13,7 @@ import TodoList from "../todo-list";
 import AddForm from "../add-form";
 import ErrorBoundary from "../error-boundary";
 
-const App = ({addFormStatus, changeAddFormStatus, records, fetchRecords}) =>{
+const App = ({addFormStatus, setAddFormStatus, records, fetchRecords}) =>{
 
   // функция для добавления записи
   const formSendFunc = async (text) =>{
@@ -22,7 +22,7 @@ const App = ({addFormStatus, changeAddFormStatus, records, fetchRecords}) =>{
     fetchRecords(`addRecord`, text);
 
     // меняем AddFormStatus на false
-    await changeAddFormStatus(false);
+    await setAddFormStatus(false);
 
     // скроллим страницу на начало документа
     setTimeout(async () =>
@@ -52,7 +52,7 @@ const App = ({addFormStatus, changeAddFormStatus, records, fetchRecords}) =>{
       title: `Done`,
       icon: `done`
     }
-  ]
+  ];
 
   // после первого монтирования, получаем в store массив записей из localstorage
   useEffect(() => fetchRecords(),[]);
@@ -98,15 +98,15 @@ const App = ({addFormStatus, changeAddFormStatus, records, fetchRecords}) =>{
     }
   }
 
-  // при активном модальном окне, при клике по элементу без атрибута data-add-form, меняем AddFormStatus на false
-  const appMouseDownHandler = ({target}) =>{
-    if (addFormStatus && !target.dataset.addForm){
-        changeAddFormStatus(false)
+  // при активном модальном окне, при клике по элементу без атрибута data-add-form или нажатию Esc, меняем AddFormStatus на false
+  const formCloseHandler = ({target, key}) =>{
+    if (addFormStatus && (!target.dataset.addForm || key === `Escape`)){
+      setAddFormStatus(false);
     }
   }
 
   return (
-    <div id="app" className="app" onBlur={tabDownHandler} onMouseDown={appMouseDownHandler}>
+    <div id="app" className="app" onBlur={tabDownHandler} onMouseDown={formCloseHandler} onKeyUp={formCloseHandler}>
       <Header>{`Todo list - ${categoriesLinks[headerTitleId]?.title}`}</Header>
       <section className="app__main">
         <ErrorBoundary>
@@ -124,14 +124,13 @@ const App = ({addFormStatus, changeAddFormStatus, records, fetchRecords}) =>{
             <ErrorBoundary><AddForm sendFunc={formSendFunc}>{`${state}`}</AddForm></ErrorBoundary>
           }
       </Transition>
-
     </div>
   );
 }
 
 App.propTypes = {
   addFormStatus: PropTypes.bool.isRequired,
-  changeAddFormStatus: PropTypes.func.isRequired,
+  setAddFormStatus: PropTypes.func.isRequired,
   fetchRecords: PropTypes.func.isRequired,
   records: PropTypes.arrayOf(PropTypes.shape({
     date: PropTypes.number.isRequired,
@@ -143,7 +142,7 @@ App.propTypes = {
 const mapStateToProps = (state) =>({...state});
 
 const mapDispatchToProps = {
-  changeAddFormStatus,
+  setAddFormStatus,
   fetchRecords: fetchRecordsWithCallback
 };
 

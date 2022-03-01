@@ -79,3 +79,13 @@
     }
   }
 }
+@media screen and (max-width: 320px) {
+  .todo-categories{
+    &__item{
+      justify-content: center;
+    }
+    &__icon{
+      display: none;
+    }
+  }
+}

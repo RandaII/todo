@@ -5,7 +5,7 @@ const initialState = {
 
 const reducer = (state = initialState, action) =>{
   switch (action.type) {
-    case `CHANGE_ADD_FORM_STATUS`:
+    case `SET_ADD_FORM_STATUS`:
       return {
         ...state,
         addFormStatus: action.payload
