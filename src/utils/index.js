@@ -39,6 +39,18 @@ class StorageChanger {
     }
   }
 
+  // отредактировать запись
+  static editRecord = ({id, text}) => {
+    const recordsArray = JSON.parse(localStorage.records);
+    const index = recordsArray.findIndex((value) => value.date === id);
+
+    if (index !== -1){
+      recordsArray[index].text = text;
+      recordsArray[index].date = new Date().getTime();
+      localStorage.records = JSON.stringify(recordsArray);
+    }
+  }
+
   // изменить done статус, в качестве id используется date
   static changeDoneStatus = (dateId) =>{
     let recordsArray = this.returnRecords();

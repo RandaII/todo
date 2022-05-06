@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import {Transition} from "react-transition-group";
 import {connect} from "react-redux";
-import {setAddFormStatus, fetchRecordsWithCallback} from "../../actions";
+import {fetchRecordsWithCallback, setAddForm} from "../../actions";
 import {Navigate, Route, Routes, useLocation,} from "react-router-dom";
 import {filterByDoneStatus} from "../../utils";
 import PropTypes from "prop-types";
@@ -13,24 +13,7 @@ import TodoList from "../todo-list";
 import AddForm from "../add-form";
 import ErrorBoundary from "../error-boundary";
 
-const App = ({addFormStatus, setAddFormStatus, records, fetchRecords}) =>{
-
-  // функция для добавления записи
-  const formSendFunc = async (text) =>{
-
-    //добавляем запись в localstorage, а следом в store обновленный массив из localstorage
-    fetchRecords(`addRecord`, text);
-
-    // меняем AddFormStatus на false
-    await setAddFormStatus(false);
-
-    // скроллим страницу на начало документа
-    setTimeout(async () =>
-      window.scrollBy({
-        top: -document.body.offsetHeight,
-        behavior: 'smooth'
-      }), 200);
-  }
+const App = ({setAddForm, records, fetchRecords, addForm}) =>{
 
   // массив для todo-categories
   const categoriesLinks = [
@@ -53,6 +36,52 @@ const App = ({addFormStatus, setAddFormStatus, records, fetchRecords}) =>{
       icon: `done`
     }
   ];
+
+  // плавный скролл в начало документа
+  const scrollOnTop = () => setTimeout(() =>
+    window.scrollBy({
+      top: -document.body.offsetHeight,
+      behavior: 'smooth'
+    }), 200);
+
+  // функция для добавления записи
+  const formAddFunc = async (text) =>{
+
+    //добавляем запись в localstorage, а следом в store обновленный массив из localstorage
+    fetchRecords(`addRecord`, text);
+
+    // меняем AddFormStatus на false
+    await setAddForm({
+      status: false,
+      type: `add`,
+    });
+
+    // скроллим страницу на начало документа
+    scrollOnTop();
+  }
+  
+  // функция для редактирования записей
+  const formEditFunc = async (text) =>{
+
+    //редактируем запись в localstorage, а следом в store добавляем обновленный массив из localstorage
+    fetchRecords(`editRecord`, {
+      text,
+      id: addForm.record.id
+    });
+
+    // меняем AddFormStatus на false
+    await setAddForm({
+      status: false,
+      type: `edit`,
+      record: {
+        id: null,
+        text: ``
+      }
+    });
+
+    // скроллим страницу на начало документа
+    scrollOnTop();
+  }
 
   // после первого монтирования, получаем в store массив записей из localstorage
   useEffect(() => fetchRecords(),[]);
@@ -91,7 +120,7 @@ const App = ({addFormStatus, setAddFormStatus, records, fetchRecords}) =>{
     if (evt.relatedTarget === null){
       return;
     }
-    if (addFormStatus){
+    if (addForm.status){
       if (!evt.relatedTarget.dataset.addForm){
         evt.target.focus();
       }
@@ -100,8 +129,8 @@ const App = ({addFormStatus, setAddFormStatus, records, fetchRecords}) =>{
 
   // при активном модальном окне, при клике по элементу без атрибута data-add-form или нажатию Esc, меняем AddFormStatus на false
   const formCloseHandler = ({target, key}) =>{
-    if (addFormStatus && (!target.dataset.addForm || key === `Escape`)){
-      setAddFormStatus(false);
+    if (addForm.status && (!target.dataset.addForm || key === `Escape`)){
+      setAddForm({status: false});
     }
   }
 
@@ -116,12 +145,17 @@ const App = ({addFormStatus, setAddFormStatus, records, fetchRecords}) =>{
       </section>
 
       <Transition
-        in={addFormStatus}
+        in={addForm.status}
         timeout={200}
         mountOnEnter
         unmountOnExit>
           {(state) =>
-            <ErrorBoundary><AddForm sendFunc={formSendFunc}>{`${state}`}</AddForm></ErrorBoundary>
+            <ErrorBoundary>
+              <AddForm
+                sendFunc={addForm.type === `edit` ? formEditFunc : formAddFunc}
+                type={addForm.type}
+                areaText={addForm?.record?.text || ``}>{`${state}`}</AddForm>
+            </ErrorBoundary>
           }
       </Transition>
     </div>
@@ -129,8 +163,15 @@ const App = ({addFormStatus, setAddFormStatus, records, fetchRecords}) =>{
 }
 
 App.propTypes = {
-  addFormStatus: PropTypes.bool.isRequired,
-  setAddFormStatus: PropTypes.func.isRequired,
+  addForm: PropTypes.shape({
+    status: PropTypes.bool.isRequired,
+    type: PropTypes.oneOf([`edit`, `add`, ``]),
+    record: PropTypes.shape({
+      id: PropTypes.number,
+      text: PropTypes.string
+    })
+  }).isRequired,
+  setAddForm: PropTypes.func.isRequired,
   fetchRecords: PropTypes.func.isRequired,
   records: PropTypes.arrayOf(PropTypes.shape({
     date: PropTypes.number.isRequired,
@@ -142,7 +183,7 @@ App.propTypes = {
 const mapStateToProps = (state) =>({...state});
 
 const mapDispatchToProps = {
-  setAddFormStatus,
+  setAddForm,
   fetchRecords: fetchRecordsWithCallback
 };
 

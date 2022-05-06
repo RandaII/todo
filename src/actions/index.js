@@ -1,8 +1,15 @@
 import {StorageChanger} from "../utils";
 
-// изменить AddFormStatus, payload - bool
-const setAddFormStatus = (payload) =>({
-  type: `SET_ADD_FORM_STATUS`,
+// изменить AddForm, payload:{
+//     status: bool,
+//     type: `edit` или `add`,
+//     record:{
+//       id: number,
+//       text: string
+//     }
+//   }
+const setAddForm = (payload) =>({
+  type: `SET_ADD_FORM`,
   payload
 });
 
@@ -19,7 +26,7 @@ const fetchRecordsWithCallback = (actionName, argument) =>{
 };
 
 export {
-  setAddFormStatus,
+  setAddForm,
   fetchRecords,
   fetchRecordsWithCallback
 }

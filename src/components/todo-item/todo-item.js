@@ -1,10 +1,25 @@
 import React from "react";
+import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {formatDate} from "../../utils";
+import {setAddForm} from "../../actions";
 
 import "./todo-item.scss";
+import "./img/edit.svg";
 
-const TodoItem = ({children:{date, text, done}, onInputChange, onCloseClick}) =>{
+const TodoItem = ({children:{date, text, done}, onInputChange, onCloseClick, setAddForm}) =>{
+
+  // вызвать editForm
+  const editFunc = () =>{
+    setAddForm({
+      status: true,
+      type: `edit`,
+      record:{
+        id: date,
+        text
+      }
+    });
+  }
 
   // форматируем дату заметки, в зависимости от дня добавления
   let recDate = formatDate(date);
@@ -30,7 +45,18 @@ const TodoItem = ({children:{date, text, done}, onInputChange, onCloseClick}) =>
         </div>
         <p className="todo-item__date">{recDate}</p>
       </label>
-      <button type="button" className="todo-item__close" onClick={onCloseClick}></button>
+      <div className="todo-item__button-container">
+        <button
+          type="button"
+          className="todo-item__edit"
+          onClick={editFunc}>
+          <svg fill="#000000" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" width="18px" height="18px">    <path d="M 18 2 L 15.585938 4.4140625 L 19.585938 8.4140625 L 22 6 L 18 2 z M 14.076172 5.9238281 L 3 17 L 3 21 L 7 21 L 18.076172 9.9238281 L 14.076172 5.9238281 z"/></svg>
+        </button>
+        <button
+          type="button"
+          className="todo-item__close"
+          onClick={onCloseClick}></button>
+      </div>
     </div>
   );
 }
@@ -38,6 +64,7 @@ const TodoItem = ({children:{date, text, done}, onInputChange, onCloseClick}) =>
 TodoItem.propTypes = {
   onInputChange: PropTypes.func.isRequired,
   onCloseClick: PropTypes.func.isRequired,
+  setAddForm: PropTypes.func.isRequired,
   children: PropTypes.shape({
     date: PropTypes.number.isRequired,
     text: PropTypes.string.isRequired,
@@ -45,4 +72,10 @@ TodoItem.propTypes = {
   }).isRequired
 }
 
-export default TodoItem;
+const mapStateToProps = () =>({});
+
+const mapDispatchToProps = {
+  setAddForm
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TodoItem);

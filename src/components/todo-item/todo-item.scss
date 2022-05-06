@@ -7,7 +7,8 @@
   box-sizing: border-box;
   margin-bottom: 10px;
 
-  &:hover &__close, &:focus &__close{
+  &:hover button,
+  &:focus button{
     opacity: .8;
   }
 
@@ -50,8 +51,10 @@
   }
 
   &__text{
+    display: block;
     font-size: 16px;
     line-height: 20px;
+    padding-right: 40px;
     word-break: break-all;
   }
 
@@ -61,22 +64,36 @@
     text-align: right;
   }
 
+  &__button-container{
+    display: flex;
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+  button{
+    padding: 0;
+    cursor: pointer;
+
+    svg{
+      transition: .1s ease-out;
+    }
+  }
+
   &__close{
     height: 25px;
     width: 25px;
     background-color: transparent;
-    position: absolute;
-    top: 0;
-    right: 0;
+    position: relative;
     box-sizing: border-box;
     border: none;
     opacity: 0;
-    cursor: pointer;
 
     &:focus{
       opacity: .8;
       outline: 2px solid $mainColor;
     }
+
     &:hover, &:focus{
       &:before, &:after{
         background-color: $accentColor;
@@ -100,6 +117,25 @@
     }
     &:after{
       transform: rotate(-45deg);
+    }
+  }
+
+  &__edit{
+    margin-top: 5px;
+    border: none;
+    background-color: transparent;
+    opacity: 0;
+
+    &:hover,
+    &:focus{
+      svg{
+        fill: $accentColor;
+      }
+    }
+
+    &:focus{
+      opacity: .8;
+      outline: 2px solid $mainColor;
     }
   }
 }
