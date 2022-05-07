@@ -26,7 +26,21 @@ const TodoList = ({setAddForm, fetchRecords, children = []}) =>{
     // удаляем данную заметку, и обновляем store
     const onCloseClick = () => fetchRecords(`deleteRecord`, value.date);
 
-    return <TodoItem key={value.date} onInputChange={onInputChange} onCloseClick={onCloseClick}>{value}</TodoItem>;
+    // функция для вызова editForm
+    const todoItemEditFunc = () => setAddForm({
+      status: true,
+      type: `edit`,
+      record:{
+        id: value.date,
+        text: value.text
+      }
+    });
+
+    return <TodoItem
+      key={value.date}
+      onInputChange={onInputChange}
+      onCloseClick={onCloseClick}
+      editFunc={todoItemEditFunc}>{value}</TodoItem>;
   });
 
   // при обновлении, проверяем высоту документа и при необходимости меняем класс у addButton, для корректного отображения компонента

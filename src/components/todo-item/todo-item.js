@@ -1,25 +1,10 @@
 import React from "react";
-import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {formatDate} from "../../utils";
-import {setAddForm} from "../../actions";
 
 import "./todo-item.scss";
-import "./img/edit.svg";
 
-const TodoItem = ({children:{date, text, done}, onInputChange, onCloseClick, setAddForm}) =>{
-
-  // вызвать editForm
-  const editFunc = () =>{
-    setAddForm({
-      status: true,
-      type: `edit`,
-      record:{
-        id: date,
-        text
-      }
-    });
-  }
+const TodoItem = ({children:{date, text, done}, onInputChange, onCloseClick, editFunc}) =>{
 
   // форматируем дату заметки, в зависимости от дня добавления
   let recDate = formatDate(date);
@@ -64,7 +49,7 @@ const TodoItem = ({children:{date, text, done}, onInputChange, onCloseClick, set
 TodoItem.propTypes = {
   onInputChange: PropTypes.func.isRequired,
   onCloseClick: PropTypes.func.isRequired,
-  setAddForm: PropTypes.func.isRequired,
+  editFunc: PropTypes.func.isRequired,
   children: PropTypes.shape({
     date: PropTypes.number.isRequired,
     text: PropTypes.string.isRequired,
@@ -72,10 +57,4 @@ TodoItem.propTypes = {
   }).isRequired
 }
 
-const mapStateToProps = () =>({});
-
-const mapDispatchToProps = {
-  setAddForm
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(TodoItem);
+export default TodoItem;
